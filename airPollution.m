@@ -1,22 +1,17 @@
 function [air] = airPollution(air, myWay10, myWay25, VC10, VC25)
 
 %Obtain Average Values over the course of a time period collected
-% avgMW10 = randi(40,1);     %mean(myWay10);
-% avgMW25 = randi(20,1);               %mean(myWay25);
-% avgVC10 = randi(40,1);     %mean(VC10);
-% avgVC25 = randi(20,1);               %mean(VC25);
-
-
 avgMW10 = mean(myWay10)
 avgMW25 = mean(myWay25)
 avgVC10 = mean(VC10)
 avgVC25 = mean(VC25)
 
-
-avgMW10 = max(myWay10)
-avgMW25 = max(myWay25)
-avgVC10 = max(VC10)
-avgVC25 = max(VC25)
+% Utilize Max values when air pollution levels are low in order to show
+% the utility of this routing parameter
+% avgMW10 = max(myWay10)
+% avgMW25 = max(myWay25)
+% avgVC10 = max(VC10)
+% avgVC25 = max(VC25)
 coeff = 0.5;
 
 

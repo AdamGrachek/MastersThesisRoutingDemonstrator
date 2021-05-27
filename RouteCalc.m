@@ -1,17 +1,16 @@
 clearvars
-%New comments for git
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % -----------------------------User Input----------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-mode = 2;       %1 for pedestrian (walking) 2 for micromobility (scooters, bikes, etc.), 3 for wheelchairs and trolleys
+mode = 1;        %1 for pedestrian (walking) 2 for micromobility (scooters, bikes, etc.), 3 for wheelchairs and trolleys
 origin = 141;    %randi(length(dist),1);
-dest = 1;      %randi(length(dist),1);
+dest = 1;        %randi(length(dist),1);
 paveRate = 0;
 elevRate = 0;
 airRate =0;
-TTRate=0;
+TTRate=10;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %---------------------------Load Data--------------------------------------
@@ -31,7 +30,7 @@ TTRate=0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Normalize Parameters
-dist(dist==0)=NaN;  %eliminates the effect of null values
+dist(dist==0)=NaN;      %eliminates the effect of null values
 pave(pave==0)=NaN;
 elev(elev==0)=NaN;
 ped(ped==0)=NaN;
@@ -39,9 +38,9 @@ WC(WC==0)=NaN;
 travelTime(travelTime==0)=NaN;
 
 %Removes inaccessible wheelchair links from normalization process (Relevant only when mode = 3)
-elev(travelTime==Inf)=100000;
-dist(travelTime==Inf)=100000;
-travelTime(travelTime==Inf)=100000; 
+elev(travelTime==Inf)=NaN;
+dist(travelTime==Inf)=NaN;
+travelTime(travelTime==Inf)=NaN; 
 
 % Normalization according to max-min normalization
 distNorm = (dist - min(min(dist)))/(max(max(dist))-min(min(dist)));
@@ -104,8 +103,8 @@ elseif mode == 3
 end
 
 
-%if priority is zero for all three parameters, then the parameter variable
-%is set to 1 to become a normal shortest path.
+% If priority is zero for all three parameters, then the parameter variable
+% is set to 1 to become a normal shortest path.
 if parameters(1:length(dist),1:length(dist)) == 0
     parameters(1:length(dist),1:length(dist)) = 1;
 end
@@ -118,15 +117,14 @@ mat = (parameters).*distNorm+TTNorm*TTRate;
 
 %Calculate the cost and route for the desired origin and destination
 % [cost route] = function(map, origin, destination)
-[cost, route] = dijkstra(dist,origin,dest);     %Shortest path distance
-[costMod, routeMod] = dijkstra(mat,origin,dest);        %Shortest path w/ mods
+[cost, route] = dijkstra(dist,origin,dest);             %Shortest path distance
+[costMod, routeMod] = dijkstra(mat,origin,dest);        %Shortest path w/ modifications
 
-%Calculates cost of shortest path with the same weights as modified path
+% Calculates cost of shortest path with the same weights as modified path
 cost=0;
 for q = length(route)-1:-1:1
     cost=cost+mat(route(q+1),route(q));
 end
-
 
 % Obtain coords of shortest path distance
 for j=1:length(route)
@@ -134,7 +132,7 @@ for j=1:length(route)
     RouteLon(j) = str2double(coordLon(route(j)));
 end
 
-%Obtain coords of shortest path w/ mods
+% Obtain coordinates of shortest path w/ mods
 for j=1:length(routeMod)
     ModLat(j) = str2double(coordLat(routeMod(j)));
     ModLon(j) = str2double(coordLon(routeMod(j)));
@@ -154,15 +152,13 @@ for j=length(route):-1:2
 end
 TT = TT/60; %Convert to minutes
 
-fprintf('The travel time for the modified path is %.2f minutes', TTMod);
-fprintf('The travel time for the shortest path is %.2f minutes', TT);
+fprintf('The travel time for the modified path is %.2f minutes ', TTMod);
+fprintf('The travel time for the shortest path is %.2f minutes ', TT);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %--------------------------Mapping-----------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 
 name = 'openstreetmap';
 url = 'https://a.tile.openstreetmap.org/${z}/${x}/${y}.png';
@@ -170,8 +166,7 @@ copyright = char(uint8(169));
 attribution = copyright + "OpenStreetMap contributors.";
 addCustomBasemap(name,url,'Attribution',attribution)
 
-
-%Map Settings
+% Map Settings
 zoomLevel = 15;
 latcenter = 58.589886;
 loncenter = 16.181981;

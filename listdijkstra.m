@@ -1,3 +1,10 @@
+% Function created by Dimas Aryo 
+% https://se.mathworks.com/matlabcentral/fileexchange/36140-dijkstra-algorithm
+% Cited As:
+% Dimas Aryo (2021). Dijkstra Algorithm (https://www.mathworks.com/matlabcentral/fileexchange/36140-dijkstra-algorithm), 
+% MATLAB Central File Exchange. Retrieved March 16, 2021.
+
+%---------------------------------------------------
 function L = listdijkstra(L,W,s,d)
 
 index=size(W,1);

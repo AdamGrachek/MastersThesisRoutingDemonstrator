@@ -10,22 +10,22 @@ coords = readtable('RoutingWeights.xlsx','Sheet','Coordinates','Range','B1:B142'
 coords=(table2array(coords))';
 % coords = (table2array(Coordinates))';       %Coordinates of Nodes
 
-%Elevation Categorized
+% Elevation Categorized
 elev = readmatrix('RoutingWeights.xlsx','Sheet','ElevationCategorized','Range','B2:EL142');
 elev(isnan(elev))=0;
 
-%Air Quality
+% Air Quality
 air = readmatrix('RoutingWeights.xlsx','Sheet','Air','Range','B2:EL142');
 
-%Cyclist Pavement Quality
+% Cyclist Pavement Quality
 pave = readmatrix('RoutingWeights.xlsx','Sheet','PavementQuality','Range','B2:EL142');
 pave(isnan(pave))=0;
 
-%Ped Pavement Quality
+% Ped Pavement Quality
 ped = readmatrix('RoutingWeights.xlsx','Sheet','PedQuality','Range','B2:EL142');
 ped(isnan(ped))=0;
 
-%Wheelchair/Trolley Pavement Quality
+% Wheelchair/Trolley Pavement Quality
 WC = readmatrix('RoutingWeights.xlsx','Sheet','WCPaveQuality','Range','B2:EL142');
 WC(isnan(WC))=0;
 
@@ -61,7 +61,7 @@ end
 
 travelTime = dist./speed;     % seconds <====  m / (m/s)
 
-%Split Coordinates into Lat and Long
+% Split Coordinates into Latitude and Longitude
 for i = 1:length(coords)
     newCoords(:,i) = split(coords(i),', ');
 end 
